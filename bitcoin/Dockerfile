@@ -1,6 +1,6 @@
 FROM debian:bullseye-slim as builder
 
-ARG bitcoin_core_version="22.0"
+ARG bitcoin_core_version="23.0"
 
 RUN apt-get update && apt-get install -y bzip2 && \
     rm -rf /var/lib/apt/lists/*
@@ -8,17 +8,17 @@ RUN apt-get update && apt-get install -y bzip2 && \
 RUN addgroup --gid 1337 moonramp
 RUN adduser --disabled-password --shell /bin/sh moonramp --gid 1337 --uid 1337 --gecos ''
 RUN mkdir /home/moonramp/.bitcoin
+COPY ./bitcoin.conf /home/moonramp/.bitcoin/bitcoin.conf
 RUN chown -R moonramp:moonramp /home/moonramp
 
 WORKDIR /opt
 
-COPY ./bitcoin_core.sha512 /opt/sums
-COPY ./bitcoin.conf /opt/bitcoin.conf
+COPY ./bitcoin_core.sha256 /opt/sums
 
-ADD https://bitcoincore.org/bin/bitcoin-core-$bitcoin_core_version/bitcoin-$bitcoin_core_version-x86_64-linux-gnu.tar.gz ./bitcoin-x86_64-linux-gnu.tar.gz
+ADD https://bitcoincore.org/bin/bitcoin-core-$bitcoin_core_version/bitcoin-$bitcoin_core_version-x86_64-linux-gnu.tar.gz ./bitcoin-$bitcoin_core_version-x86_64-linux-gnu.tar.gz
 
-RUN sha512sum -c sums
-RUN tar -xzf bitcoin-x86_64-linux-gnu.tar.gz && cp -r /opt/bitcoin-$bitcoin_core_version/bin/* /opt/ && rm -rf /opt/bitcoin-x86_64-linux-gnu.tar.gz bitcoin-$bitcoin_core_version
+RUN sha256sum -c sums
+RUN tar -xzf bitcoin-$bitcoin_core_version-x86_64-linux-gnu.tar.gz && cp -r /opt/bitcoin-$bitcoin_core_version/bin/* /opt/ && rm -rf /opt/bitcoin-$bitcoin_core_version-x86_64-linux-gnu.tar.gz bitcoin-$bitcoin_core_version
 
 FROM scratch
 

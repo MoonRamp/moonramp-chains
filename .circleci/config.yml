@@ -13,6 +13,8 @@ jobs:
   docker-bitcoin-release:
     machine:
       docker_layer_caching: true
+    environment:
+      BITCOIN_VERSION: 23.0
     steps:
       - checkout
       - run:
@@ -23,14 +25,14 @@ jobs:
       - run:
           name: "Tag Docker Bitcoin Release Image"
           command: |
-            docker tag moonramp/bitcoin:$CIRCLE_WORKFLOW_JOB_ID moonramp/bitcoin:$CIRCLE_SHA1
-            docker tag moonramp/bitcoin:$CIRCLE_WORKFLOW_JOB_ID moonramp/bitcoin:$CIRCLE_TAG
+            docker tag moonramp/bitcoin:$CIRCLE_WORKFLOW_JOB_ID moonramp/bitcoin:$CIRCLE_SHA1-v$BITCOIN_VERSION
+            docker tag moonramp/bitcoin:$CIRCLE_WORKFLOW_JOB_ID moonramp/bitcoin:$CIRCLE_TAG-v$BITCOIN_VERSION
       - run:
           name: "Push Docker Bitcoin Release Image"
           command: |
               docker login -u moonramp -p $DOCKER_HUB_ACCESS_TOKEN
-              docker push moonramp/bitcoin:$CIRCLE_SHA1
-              docker push moonramp/bitcoin:$CIRCLE_TAG
+              docker push moonramp/bitcoin:$CIRCLE_SHA1-v$BITCOIN_VERSION
+              docker push moonramp/bitcoin:$CIRCLE_TAG-v$BITCOIN_VERSION
 workflows:
   docker-dev-workflow:
     jobs:

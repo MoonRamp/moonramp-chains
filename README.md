@@ -25,9 +25,9 @@
 
 ## Image Design
 
-* Non-root user (moonramp:moonramp | uid:1337 gid:1337)
+* Non-root user (moonramp:moonramp uid:1337 gid:1337)
 * Multi-stage build with scratch based final layer for the bare essentials
-* Official sha512 verified bins
+* Official sha256 verified bins
 
 ### Bitcoin (BTC)
 
