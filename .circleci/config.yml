@@ -1,0 +1,21 @@
+version: 2.1
+jobs:
+  docker-bitcoin-dev:
+    machine:
+      docker_layer_caching: true
+    steps:
+      - checkout
+      - run:
+          name: "Build Docker Bitcoin Dev Image"
+          command: |
+            cd bitcoin
+            docker build . --build-arg artifact_mode='' --build-arg artifact_path='debug' -t moonramp/bitcoin:$CIRCLE_WORKFLOW_JOB_ID
+workflows:
+  docker-dev-workflow:
+    jobs:
+      - docker-bitcoin-dev:
+          filters:
+            tags:
+              ignore: /.*/
+            branches:
+              ignore: /master/
