@@ -9,7 +9,28 @@ jobs:
           name: "Build Docker Bitcoin Dev Image"
           command: |
             cd bitcoin
-            docker build . --build-arg artifact_mode='' --build-arg artifact_path='debug' -t moonramp/bitcoin:$CIRCLE_WORKFLOW_JOB_ID
+            docker build . -t moonramp/bitcoin:$CIRCLE_WORKFLOW_JOB_ID
+  docker-bitcoin-release:
+    machine:
+      docker_layer_caching: true
+    steps:
+      - checkout
+      - run:
+          name: "Build Docker Bitcoin Release Image"
+          command: |
+            cd bitcoin
+            docker build . -t moonramp/bitcoin:$CIRCLE_WORKFLOW_JOB_ID
+      - run:
+          name: "Tag Docker Bitcoin Release Image"
+          command: |
+            docker tag moonramp/bitcoin:$CIRCLE_WORKFLOW_JOB_ID moonramp/bitcoin:$CIRCLE_SHA1
+            docker tag moonramp/bitcoin:$CIRCLE_WORKFLOW_JOB_ID moonramp/bitcoin:$CIRCLE_TAG
+      - run:
+          name: "Push Docker Bitcoin Release Image"
+          command: |
+              docker login -u moonramp -p $DOCKER_HUB_ACCESS_TOKEN
+              docker push moonramp/bitcoin:$CIRCLE_SHA1
+              docker push moonramp/bitcoin:$CIRCLE_TAG
 workflows:
   docker-dev-workflow:
     jobs:
@@ -19,3 +40,13 @@ workflows:
               ignore: /.*/
             branches:
               ignore: /master/
+  docker-release-workflow:
+    jobs:
+      - docker-bitcoin-release:
+          filters:
+            tags:
+              only: /^\d+\.\d+\.\d+$/
+            branches:
+              ignore: /.*/
+          context:
+            - dockerhub
