@@ -43,10 +43,10 @@ COPY --from=builder /opt/test_bitcoin /usr/bin/
 EXPOSE 8332
 # testnet
 EXPOSE 18332
+# regtest
+EXPOSE 18443
 # signet
 EXPOSE 38332
-# regtest
-EXPOSE 18444
 
 # bitcoin-cli -regtest createwallet moonramp
 # bitcoin-cli -regtest generatetoaddress 101 $(bitcoin-cli -regtest getnewaddress)
