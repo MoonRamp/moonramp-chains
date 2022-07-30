@@ -10,8 +10,8 @@
   </p></div>
 
   <div><p>
-    <a href="https://dl.circleci.com/status-badge/redirect/gh/MoonRamp/moonramp-chains/tree/master">
-      <img src="https://dl.circleci.com/status-badge/img/gh/MoonRamp/moonramp-chains/tree/master.svg?style=shield"/>
+    <a href="https://github.com/MoonRamp/moonramp-chains/actions/workflows/docker-images.yml">
+      <img src="https://github.com/MoonRamp/moonramp-chains/actions/workflows/docker-images.yml/badge.svg"/>
     </a>
     <a href="https://hub.docker.com/repository/docker/moonramp/bitcoin">
       <img src="https://img.shields.io/docker/v/moonramp/bitcoin?label=bitcoin&color=yellow"/>
