@@ -1,0 +1,38 @@
+name: Docker Image CI
+on:
+  pull_request:
+    branches:
+  push:
+    tags:
+    - '[0-9]+.[0-9]+.[0-9]+'
+jobs:
+  bitcoin-dev:
+    runs-on: ubuntu-latest
+    if: github.ref_type != 'tag'
+    steps:
+    - uses: actions/checkout@v3
+    - name: Build Bitcoin Docker Image
+      run: |
+        cd bitcoin
+        docker build . --tag moonramp/bitcoin:${GITHUB_RUN_ID}
+  bitcoin-release:
+    runs-on: ubuntu-latest
+    if: github.ref_type == 'tag'
+    env:
+      DOCKER_HUB_ACCESS_TOKEN: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
+      BITCOIN_VERSION: 23.0
+    steps:
+    - uses: actions/checkout@v3
+    - name: Build Bitcoin Docker Image
+      run: |
+        cd bitcoin
+        docker build . --tag moonramp/bitcoin:${GITHUB_RUN_ID}
+    - name: Tag Bitcoin Docker Image
+      run: |
+        docker tag moonramp/bitcoin:${GITHUB_RUN_ID} moonramp/bitcoin:$GITHUB_SHA-v$BITCOIN_VERSION
+        docker tag moonramp/bitcoin:${GITHUB_RUN_ID} moonramp/bitcoin:$GITHUB_REF_NAME-v$BITCOIN_VERSION
+    - name: Push Bitcoin Docker Image
+      run: |
+        docker login -u moonramp -p $DOCKER_HUB_ACCESS_TOKEN
+        docker push moonramp/bitcoin:$GITHUB_SHA-v$BITCOIN_VERSION
+        docker push moonramp/bitcoin:$GITHUB_REF_NAME-v$BITCOIN_VERSION
