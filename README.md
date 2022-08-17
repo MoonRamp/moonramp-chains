@@ -13,8 +13,11 @@
     <a href="https://github.com/MoonRamp/moonramp-chains/actions/workflows/docker-images.yml">
       <img src="https://github.com/MoonRamp/moonramp-chains/actions/workflows/docker-images.yml/badge.svg"/>
     </a>
-    <a href="https://hub.docker.com/repository/docker/moonramp/bitcoin">
+    <a href="https://hub.docker.com/r/moonramp/bitcoin">
       <img src="https://img.shields.io/docker/v/moonramp/bitcoin?label=bitcoin&color=yellow"/>
+    </a>
+    <a href="https://hub.docker.com/r/moonramp/monero">
+      <img src="https://img.shields.io/docker/v/moonramp/monero?label=monero&color=orange"/>
     </a>
     <a href="https://github.com/moonramp/moonramp-chains/blob/master/LICENSE">
       <img src="https://img.shields.io/github/license/moonramp/moonramp"/>
@@ -31,4 +34,8 @@
 
 ### Bitcoin (BTC)
 
-The BTC image is based off [Bitcoin Core](https://bitcoin.org/en/download). All bitcoincore bins and sh are included in the image.
+The BTC image is based off [Bitcoin Core](https://bitcoin.org/en/download). All bitcoincore bins and sh are included in the image. See more at https://bitcoin.org/en/bitcoin-core/help
+
+### Monero (XMR)
+
+The XMR image is based off [Monero](https://www.getmonero.org/downloads). All monero bins and sh are included in the image. See more at https://www.getmonero.org/resources/developer-guides/
