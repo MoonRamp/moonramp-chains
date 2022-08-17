@@ -20,7 +20,7 @@ jobs:
     if: github.ref_type == 'tag'
     env:
       DOCKER_HUB_ACCESS_TOKEN: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
-      BITCOIN_VERSION: 23.0
+      BITCOIN_VERSION: '23.0'
     steps:
     - uses: actions/checkout@v3
     - name: Build Bitcoin Docker Image
@@ -36,3 +36,33 @@ jobs:
         docker login -u moonramp -p $DOCKER_HUB_ACCESS_TOKEN
         docker push moonramp/bitcoin:$GITHUB_SHA-v$BITCOIN_VERSION
         docker push moonramp/bitcoin:$GITHUB_REF_NAME-v$BITCOIN_VERSION
+  monero-dev:
+    runs-on: ubuntu-latest
+    if: github.ref_type != 'tag'
+    steps:
+    - uses: actions/checkout@v3
+    - name: Build Monero Docker Image
+      run: |
+        cd monero
+        docker build . --tag moonramp/monero:${GITHUB_RUN_ID}
+  monero-release:
+    runs-on: ubuntu-latest
+    if: github.ref_type == 'tag'
+    env:
+      DOCKER_HUB_ACCESS_TOKEN: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
+      MONERO_VERSION: '0.18.1.0'
+    steps:
+    - uses: actions/checkout@v3
+    - name: Build Monero Docker Image
+      run: |
+        cd monero
+        docker build . --tag moonramp/monero:${GITHUB_RUN_ID}
+    - name: Tag Monero Docker Image
+      run: |
+        docker tag moonramp/monero:${GITHUB_RUN_ID} moonramp/monero:$GITHUB_SHA-v$MONERO_VERSION
+        docker tag moonramp/monero:${GITHUB_RUN_ID} moonramp/monero:$GITHUB_REF_NAME-v$MONERO_VERSION
+    - name: Push Monero Docker Image
+      run: |
+        docker login -u moonramp -p $DOCKER_HUB_ACCESS_TOKEN
+        docker push moonramp/monero:$GITHUB_SHA-v$MONERO_VERSION
+        docker push moonramp/monero:$GITHUB_REF_NAME-v$MONERO_VERSION

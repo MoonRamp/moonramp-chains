@@ -18,7 +18,7 @@ COPY ./bitcoin_core.sha256 /opt/sums
 ADD https://bitcoincore.org/bin/bitcoin-core-$bitcoin_core_version/bitcoin-$bitcoin_core_version-x86_64-linux-gnu.tar.gz ./bitcoin-$bitcoin_core_version-x86_64-linux-gnu.tar.gz
 
 RUN sha256sum -c sums
-RUN tar -xzf bitcoin-$bitcoin_core_version-x86_64-linux-gnu.tar.gz && cp -r /opt/bitcoin-$bitcoin_core_version/bin/* /opt/ && rm -rf /opt/bitcoin-$bitcoin_core_version-x86_64-linux-gnu.tar.gz bitcoin-$bitcoin_core_version
+RUN tar -xzf bitcoin-$bitcoin_core_version-x86_64-linux-gnu.tar.gz && cp -r /opt/bitcoin-$bitcoin_core_version/bin/* /opt/ && rm -rf bitcoin-$bitcoin_core_version-x86_64-linux-gnu.tar.gz bitcoin-$bitcoin_core_version
 
 FROM scratch
 
@@ -28,8 +28,8 @@ COPY --from=builder /home/moonramp /home/moonramp
 ENV LOGNAME=moonramp
 USER moonramp
 
-COPY --from=builder /lib/x86_64-linux-gnu /lib/x86_64-linux-gnu
-COPY --from=builder /lib64/ /lib64/
+COPY --from=builder /lib/x86_64-linux-gnu /lib/x86_64-linux-gnu/
+COPY --from=builder /lib64 /lib64/
 COPY --from=builder /bin/sh /bin/
 COPY --from=builder /opt/bitcoin-cli /usr/bin/
 COPY --from=builder /opt/bitcoin-qt /usr/bin/
